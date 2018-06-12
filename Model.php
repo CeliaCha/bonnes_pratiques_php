@@ -22,7 +22,7 @@ class Database {
             self::$db = new PDO($dsn, $username, $password, $options);    
         } catch (Exception $e) {
             error_log($e->getMessage()); //In production
-            exit('Problème de connexion avec la base de données'); 
+            exit('Problème de connexion avec la base de données); 
         }
     }
 }
@@ -78,9 +78,10 @@ class User extends Database {
         }
     }
 
-    public function read($id, $arraycolumns) {
-        // @TODO : extraire colonnes du tableau en entrée
-        return parent::$db->query("SELECT $column FROM $table WHERE id = '$id'")->fetch();
+    public function read(int $id) {        
+        $stmt = parent::$db->prepare("SELECT * FROM users WHERE ID = $id AND status=:status LIMIT 1");
+        $stmt->execute([$column => $value, 'status' => $status]);
+        return $stmt->fetch();
     }
     public function update($id, $arraycolumns) {
         // @TODO : extraire colonnes du tableau en entréé
@@ -89,3 +90,4 @@ class User extends Database {
         // @TODO : extraire colonnes du tableau en entréé
     }
 }
+ 
